@@ -1,27 +1,36 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const path = require('node:path');
 
 const init = async () => {
 
     const server = new Hapi.server({
         host: 'localhost',
-        port: 3001
+        port: 3001,
+        routes: {
+            files: {
+                relativeTo: path.join(__dirname, 'static')
+            }
+        }
     });
 
-    await server.register({
+    await server.register([{
         plugin: require('hapi-geo-locate'),
         options: {
             enabledByDefault: true,
         }
-    });
+    },
+    {
+        plugin: require('@hapi/inert')
+    }]);
 
     // define the route
     server.route([{
         method: 'GET',
         path: '/',
         handler: (request, h) => {
-            return `<h1>Hello World!</h1>`
+            return h.file('welcome.html');
         }
     },
     {
@@ -32,7 +41,7 @@ const init = async () => {
             if (request.location) {
                 return location;
             } else {
-                return "<h1>Your location is not enable by default!</h1>";   
+                return "<h1>Your location is not enable by default!</h1>";
             }
         }
     },
