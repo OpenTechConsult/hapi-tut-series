@@ -21,9 +21,13 @@ const init = async () => {
     // define the route http://localhost.3001/users/
     server.route({
         method: 'GET',
-        path: '/users',
+        path: '/users/{user?}',
         handler: (request, h) => {
-            return '<h1>Hello User!</h1>'
+            if (request.params.user) {
+                return `<h1>Hello ${request.params.user}</h1>`;
+            } else {
+                return `<h1>hello stranger!</h1>`;
+            }
         }
     });
 
