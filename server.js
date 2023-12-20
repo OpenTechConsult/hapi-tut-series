@@ -23,11 +23,8 @@ const init = async () => {
         method: 'GET',
         path: '/users/{user?}',
         handler: (request, h) => {
-            if (request.params.user) {
-                return `<h1>Hello ${request.params.user}</h1>`;
-            } else {
-                return `<h1>hello stranger!</h1>`;
-            }
+            return `<h1>${request.query.name}</h1><br/>
+                    <h1>${request.params.user}</h1>`;
         }
     });
 
